@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Plant = require('../models/Plant');
+const verifyToken = require('../middleware/auth');
 
 // GET /plants
 router.get('/', async (req, res) => {
@@ -27,7 +28,7 @@ router.get('/', async (req, res) => {
 });
 
 // POST /plants
-router.post('/', async (req, res) => {
+router.post('/', verifyToken, async (req, res) => {
     try {
         const { name, price, categories, inStock } = req.body;
         const plant = new Plant({ name, price, categories, inStock });
@@ -37,5 +38,6 @@ router.post('/', async (req, res) => {
         res.status(400).json({ error: err.message });
     }
 });
+
 
 module.exports = router;
